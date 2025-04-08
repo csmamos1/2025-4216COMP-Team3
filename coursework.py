@@ -289,7 +289,7 @@ while True:
     "year visualization \n and average minimum temperature againt rainfall \n"
     "type \033[1mAbdulla()\033[0m if you wish to air frost and sun\n"
     "type \033[1mJake()\033[0m if you wish to average hours of sunlight against months\n"
-    "type \033[1mJake()\033[0m if you wish to see rainfall against months data ")
+    "type \033[1mBenson()\033[0m if you wish to see rainfall against months data ")
     if Visualisation == 'quit':
         break
 
