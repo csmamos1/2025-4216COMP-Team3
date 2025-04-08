@@ -44,7 +44,7 @@ def Abdulla():
 data=pd.read_csv('MET Office Weather Data.csv')
 
 
-def joseph():
+def Joseph():
 
 # I excluded the year 1965 bcause there was missing data values!
     new_data_Hurn = data[data["rain"].notna() & (data["station"]=="hurn") & 
@@ -96,7 +96,7 @@ def joseph():
             f" is {std_dev_tmin:.2f} celsius thus each point of data deviates from the mean(Minimum teperature between 1957-2019)" 
             f" by about {CV_tmin:.2f}% \n"
             f" which is a very negligible and shows a tight consistency between the data points \n"
-            f" addiditonally there is a {missing_percentage:.2f}% error of the new data relative to the original")
+            f" addiditonally there is a {missing_percentage:.2f}% error of the new data relative to the original.")
     
     print(f"\n The average amount of rainfall from the years 1957-2019 in Hurn is \n  "
           f"{mean_rain_averages:.2f}mm and the standard deviation"
@@ -105,7 +105,7 @@ def joseph():
              f" by about {CV_rain:.2f}% \n "
             f" which is a moderate value and shows that the data points a relatively consistent with"
              f" the overall average. \n addiditonally there is a {missing_percentage:.2f}%"
-             f"error of the new data relative to the original")
+             f"error of the new data relative to the original.")
     
     
     range_years= list(range(1957,2020))
@@ -137,8 +137,9 @@ def joseph():
 
     plt.show()
     
-
-    #####******PAY ATTENTION NEED TO FIND MIN AND MAX VALUES FOR RAIN SO I CAN KNOW LIMITS FOR GRAPH****#######
+    # I want to find the min and max so i can know the ranges fro my coordinates
+    #print(min(rain_averages))
+    #print(max(rain_averages))
     fig, ax = plt.subplots()
     ax.plot( range_years, rain_averages, 'mD',  label= "rain averages")
     fig.suptitle("Average Rainfall from per year", fontsize=20)
@@ -154,9 +155,9 @@ def joseph():
 
     x=np.arange(1957, 2021)
     ax.set_xticklabels(range_years, fontsize=8)
-    ax.set_xticklabels(range_years, fontsize=8, rotation=45)  # Adjust font size here
+    ax.set_xticklabels(range_years, fontsize=8, rotation=45)  # Adjusting the years so that they fit on x-axis
     ax.set_yticklabels(ax.get_yticks(), fontsize=8)
-    ax.set_xlim(x.min()-1, x.max())  # Ensures no extra padding at the edges
+    ax.set_xlim(x.min()-1, x.max())  # to delete any extra space at the sides of grid
     mean_val = np.mean(rain_averages)
     plt.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
     ax.legend()
@@ -359,25 +360,25 @@ while True:
     if Visualisation == 'quit':
         break
 
-    if Visualisation.lower() == "joseph()":
-        joseph()
+    elif Visualisation.lower() == "joseph()":
+        Joseph()
 
-    if Visualisation.lower()=="abdulla()":
+    elif Visualisation.lower()=="abdulla()":
 
         Abdulla()
 
-    if Visualisation.lower()=="jake()":
+    elif Visualisation.lower()=="jake()":
 
         Jake()   
 
-    if Visualisation.lower()=="benson()":   
+    elif Visualisation.lower()=="benson()":   
         
         Benson()
         
-    if Visualisation.lower()=="peter()":   
+    elif Visualisation.lower()=="peter()":   
         
         Peter()
-    if Visualisation.lower()=="muhammad()": 
+    elif Visualisation.lower()=="muhammad()": 
 
         Muhammad()   
 
