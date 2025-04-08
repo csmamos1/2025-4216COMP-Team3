@@ -179,22 +179,76 @@ def joseph():
     #print(f"{max(rain_averages):.2f}")
 
 
+
+
+
+
+def Jake():
+    
+    df = pd.read_csv("MET Office Weather Data.csv")
+    
+    df = df.dropna(subset=['sun', 'month'])
+    
+    # Daytime column
+    df['date'] = pd.to_datetime(df[['year', 'month']].assign(day=1))
+    
+    # Data between 1970 and 2020 only
+    df = df[(df['year'] >= 1970) & (df['year'] <= 2020)]
+    
+    # Sort by date
+    df = df.sort_values('date')
+    
+    # Calculate monthly averages
+    monthly_avg = df.groupby('month')['sun'].mean()
+    
+    # Create plot
+    plt.figure(figsize=(14, 7))
+    
+    # Bar chart of monthly averages
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    plt.bar(months, monthly_avg, color='orange', alpha=0.7, label='Avg Sunshine Hours')
+    
+    # Customize the plot
+    plt.xlabel('Month')
+    plt.ylabel('Sunshine Hours')
+    plt.title('Average Monthly Sunshine (1970–2020)')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.5)
+    
+    # Add value labels on bars
+    for i, value in enumerate(monthly_avg):
+        plt.text(i, value + 5, f"{value:.1f}", ha='center')
+    
+    plt.tight_layout()
+    plt.show()
+
+
+
+
+
+
     
 
 while True:
-    Visualization = input("\n please type \033[1mJoseph()\033[0m to see rain against year visualization, " \
+    Visualisation = input("\n please type \033[1mJoseph()\033[0m to see rain against year visualization, " \
     "\n Aaverage minimum temperature against "
-    "year visualization \n and average minimum temperature againt rainfall"
-    "type Abdulla if you wish to air frost and sun")
-    if Visualization == 'quit':
+    "year visualization \n and average minimum temperature againt rainfall \n"
+    "type \033[1mAbdulla\033[0m if you wish to air frost and sun\n"
+    "type \033[1mJake\033[0m if you wish to average hours of sunlight against months")
+    if Visualisation == 'quit':
         break
 
-    if Visualization.lower() == "joseph()":
+    if Visualisation.lower() == "joseph()":
         joseph()
 
-    if Visualization.lower()=="abdulla()":
+    if Visualisation.lower()=="abdulla()":
 
         Abdulla()
+
+    if Visualisation.lower()=="jake()" 
+
+        Jake()   
 
     else:
         print("There is no data matching this imput") 
