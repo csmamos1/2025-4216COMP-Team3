@@ -81,16 +81,21 @@ def joseph():
     missing_percentage = (missing_months / total_months) * 100
 
     print(f"\n The average minimum temperature from the years 1957-2019 in Hurn is \n  "
-          f"{mean_tmin_averages:.2f} celcius and the standard deviation"
+          f"{mean_tmin_averages:.2f} celcius, the coldest year was in" 
+           f" 1962 which saw the coldest average minimum teperature of {min(tmin_averages):.2f}  and the standard deviation"
            f" (that is how much the the data deviates from the mean)\n"
-            f" is {std_dev_tmin:.2f} celsius thus each point of data deviates from the mean(Minimum teperature between 1957-2019) by about {CV_tmin:.2f}% \n"
+            f" is {std_dev_tmin:.2f} celsius thus each point of data" 
+            f"deviates from the mean(Minimum average teperature between 1957-2019) by about {CV_tmin:.2f}% \n"
             f" which is a very negligible and shows a tight consistency between the data points \n"
             f" addiditonally there is a {missing_percentage:.2f}% error of the new data relative to the original")
     
     print(f"\n The average amount of rainfall from the years 1957-2019 in Hurn is \n  "
-          f"{mean_rain_averages:.2f}mm and the standard deviation"
+          f"{mean_rain_averages:.2f}mm, the driest year was in 1973 which saw"
+           f" the average rainfall of just {min(rain_averages):.2f}mm, while the wettest year was in 1960"
+            f" which saw the average amount of rainfall of {max(rain_averages):.2f}mm  and the standard deviation"
            f" (that is how much the the data deviates from the mean)\n"
-            f" is {std_dev_rain:.2f}mm  thus each point of data deviates from the mean(Minimum teperature between 1957-2019) by about {CV_rain:.2f}% \n "
+            f" is {std_dev_rain:.2f}mm  thus each point of data deviates"
+             f" from the mean(Minimum teperature between 1957-2019) by about {CV_rain:.2f}% \n "
             f" which is a moderate value and shows that the data points a relatively consistent with"
              f" the overall average. \n addiditonally there is a {missing_percentage:.2f}%"
              f"error of the new data relative to the original")
