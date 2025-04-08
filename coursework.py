@@ -311,7 +311,35 @@ def Peter():
     plt.tight_layout()
     plt.show()
 
+def Muhhammad():
+    # Load the CSV file 
+    file_path = "C:\\Users\isfah\\Coursework\\Coursework\\MET Office Weather Data.csv"
+    df = pd.read_csv(file_path)
 
+    # Filter for 'aberporth' station
+    df_aberporth = df[df["station"] == "aberporth"]
+
+    # Drop rows with missing tmax or tmin values
+    df_aberporth = df_aberporth.dropna(subset=["tmax", "tmin"])
+
+    # Convert year and month into a datetime format for better plotting
+    df_aberporth["date"] = pd.to_datetime(df_aberporth[["year", "month"]].assign(day=1))
+
+    # Sort by date
+    df_aberporth = df_aberporth.sort_values("date")
+
+    # Plot temperature trends
+    plt.figure(figsize=(12, 6))
+    plt.plot(df_aberporth["date"], df_aberporth["tmax"], label="Max Temperature (°C)", color="red")
+    plt.plot(df_aberporth["date"], df_aberporth["tmin"], label="Min Temperature (°C)", color="blue")
+
+    # Formatting the plot
+    plt.xlabel("Year")
+    plt.ylabel("Temperature (°C)")
+    plt.title("Aberporth Minimum and Maximum Temperatures Over Time")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 
 
@@ -325,7 +353,8 @@ while True:
     "type \033[1mAbdulla()\033[0m if you wish to air frost and sun\n"
     "type \033[1mJake()\033[0m if you wish to average hours of sunlight against months\n"
     "type \033[1mBenson()\033[0m if you wish to see rainfall against months data \n"
-    "type \033[1mPeter()\033[0m if you wish to see the correlation between sunshine and rain")
+    "type \033[1mPeter()\033[0m if you wish to see the correlation between sunshine and rain\n"
+    "type \033[1mMuhammad()\033[0m Minimum and Maximum temperature for aberpoth /n")
     if Visualisation == 'quit':
         break
 
@@ -347,6 +376,9 @@ while True:
     if Visualisation.lower()=="peter()":   
         
         Peter()
+    if Visualisation.lower()=="muhammad()": 
+
+        Muhammad()   
 
     else:
         print("There is no data matching this imput") 
