@@ -234,8 +234,8 @@ while True:
     Visualisation = input("\n please type \033[1mJoseph()\033[0m to see rain against year visualization, " \
     "\n Aaverage minimum temperature against "
     "year visualization \n and average minimum temperature againt rainfall \n"
-    "type \033[1mAbdulla\033[0m if you wish to air frost and sun\n"
-    "type \033[1mJake\033[0m if you wish to average hours of sunlight against months")
+    "type \033[1mAbdulla()\033[0m if you wish to air frost and sun\n"
+    "type \033[1mJake()\033[0m if you wish to average hours of sunlight against months")
     if Visualisation == 'quit':
         break
 
@@ -246,7 +246,7 @@ while True:
 
         Abdulla()
 
-    if Visualisation.lower()=="jake()" 
+    if Visualisation.lower()=="jake()":
 
         Jake()   
 
