@@ -227,7 +227,7 @@ def Jake():
 def Benson():
 
             # Just put the file in the code 
-        file_path = r"C:\Users\Benson Lu\Desktop\First year Coursework\Second semester\Computer science workshop\csws-week1\MET Office Weather Data.csv"
+        file_path = r"MET Office Weather Data.csv"
 
         # Loads the weather data CSV file into a pandas DataFrame called 'dv'
         df = pd.read_csv(file_path)
