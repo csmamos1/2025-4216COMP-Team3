@@ -107,6 +107,7 @@ def joseph():
              f" the overall average. \n addiditonally there is a {missing_percentage:.2f}%"
              f"error of the new data relative to the original")
     
+    
     range_years= list(range(1957,2020))
     ###print(range_years)
 
@@ -311,9 +312,9 @@ def Peter():
     plt.tight_layout()
     plt.show()
 
-def Muhhammad():
+def Muhammad():
     # Load the CSV file 
-    file_path = "C:\\Users\isfah\\Coursework\\Coursework\\MET Office Weather Data.csv"
+    file_path = "MET Office Weather Data.csv"
     df = pd.read_csv(file_path)
 
     # Filter for 'aberporth' station
@@ -347,14 +348,14 @@ def Muhhammad():
     
 
 while True:
-    Visualisation = input("\n please type \033[1mJoseph()\033[0m to see rain against year visualization, " \
-    "\n Aaverage minimum temperature against "
-    "year visualization \n and average minimum temperature againt rainfall \n"
-    "type \033[1mAbdulla()\033[0m if you wish to air frost and sun\n"
-    "type \033[1mJake()\033[0m if you wish to average hours of sunlight against months\n"
-    "type \033[1mBenson()\033[0m if you wish to see rainfall against months data \n"
-    "type \033[1mPeter()\033[0m if you wish to see the correlation between sunshine and rain\n"
-    "type \033[1mMuhammad()\033[0m Minimum and Maximum temperature for aberpoth /n")
+    Visualisation = input("\n Please type \033[1mJoseph()\033[0m to see average minimum temperature against years(1957-2019) visualization, " \
+    "\n aaverage rainfall against years(1957-2019) "
+    "visualization and average \n minimum temperature againt rainfall against years(1957-2019) for the Station 'Hurn' visualisation \n"
+    "\ntype \033[1mAbdulla()\033[0m if you wish to air frost and sun\n"
+    "\ntype \033[1mJake()\033[0m if you wish to average hours of sunlight against months\n"
+    "\ntype \033[1mBenson()\033[0m if you wish to see rainfall against months data \n"
+    "\ntype \033[1mPeter()\033[0m if you wish to see the correlation between sunshine and rain\n"
+    "\ntype \033[1mMuhammad()\033[0m Minimum and Maximum temperature for aberpoth \n")
     if Visualisation == 'quit':
         break
 
