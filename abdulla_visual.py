@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-df = pd.read_csv("MET Office Weather Data.csv")  # Replace with your actual filename
+df = pd.read_csv("MET Office Weather Data.csv")
 
 # Drop rows with missing values in 'af' or 'sun'
 df = df.dropna(subset=['af', 'sun'])
@@ -19,21 +19,18 @@ df = df.sort_values('date')
 # Create plot
 plt.figure(figsize=(14, 7))
 
-# Define color and style options
-colors = ['orange', 'blue', 'green', 'red', 'purple', 'brown', 'teal', 'gray', 'olive', 'pink', 'navy', 'coral', 'black', 'gold']
-linestyles = ['-', '--']
+# Plot sunshine data in orange
+plt.plot(df['date'], df['sun'], label='Sunshine (hours)', color='orange', linestyle='-')
 
-# Plot data in 5-year intervals
-for start_year in range(1950, 2021, 5):
-    end_year = start_year + 4
-    subset = df[(df['year'] >= start_year) & (df['year'] <= end_year)]
-    plt.plot(subset['date'], subset['sun'], label=f'Sun {start_year}-{end_year}', linestyle='-', linewidth=1)
-    plt.plot(subset['date'], subset['af'], label=f'Frost {start_year}-{end_year}', linestyle='--', linewidth=1)
+# Plot air frost data in blue
+plt.plot(df['date'], df['af'], label='Days of Air Frost', color='blue', linestyle='--')
 
+# Customize the plot
 plt.xlabel('Date')
 plt.ylabel('Value')
-plt.title('Sunshine and Air Frost (5-Year Intervals, 1950–2020)')
-plt.legend(ncol=2)
+plt.title('Sunshine and Air Frost Trends (1950–2020)')
+plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
