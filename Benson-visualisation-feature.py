@@ -3,52 +3,80 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-# Just put the file in the code 
-file_path = r"C:\Users\Benson Lu\Desktop\First year Coursework\Second semester\Computer science workshop\csws-week1\MET Office Weather Data.csv"
+def Benson():
 
-# Loads the weather data CSV file into a pandas DataFrame called 'dv'
-df = pd.read_csv(file_path)
+    # Load the weather data  CSV file into a pandas DataFrame called 'df'
+    df = pd.read_csv("MET Office Weather Data.csv")
 
-# Filters the dataset to include only rows hwere the station name is "Aberrpoth"and will ignores other location 
-aberporth_df = df[df['station'].str.lower().str.strip() == 'aberporth']
+    # Filter for the two stations is "Aberrpoth" and "Armagh"
+    stations = ["aberporth", "armagh"]
+    df_filtered = df[df["station"].isin(stations)].dropna(subset=["rain"])
 
-# Parse the date from year and month
-aberporth_df['month_parsed'] = pd.to_datetime(
-    aberporth_df['year'].astype(int).astype(str) + '-' + aberporth_df['month'].astype(int).astype(str),
-    errors='coerce'
-)
+    # === RAINFALL REPORT ===
+    print("=== Rainfall Report Per Station ===")
+    for station in stations:
+        station_data = df_filtered[df_filtered["station"] == station]
+        #Get Max and Min rainfall information 
+        max_row = station_data.loc[station_data["rain"].idxmax()]
+        min_row = station_data.loc[station_data["rain"].idxmin()]
+        #Print Maximum rainfall information 
+        #Print year and month information 
+        print(f"\n>> Max Rainfall - {station.title()}:")
+        print(f"Year: {int(max_row['year'])}, Month: {int(max_row['month'])}, Rainfall: {max_row['rain']} mm")
+        #Print Mainmum rainfall information 
+        #Print year and month information
+        print(f">> Min Rainfall - {station.title()}:")
+        print(f"Year: {int(min_row['year'])}, Month: {int(min_row['month'])}, Rainfall: {min_row['rain']} mm")
 
-# Sorting Data by Date
-aberporth_df = aberporth_df.sort_values('month_parsed')
+    # === PLOT SCATTER CHART ===
+    plt.figure(figsize=(14, 6))
 
-# Get max and min rain imformation for the data
-max_rain_row = aberporth_df.loc[aberporth_df['rain'].idxmax()]
-min_rain_row = aberporth_df.loc[aberporth_df['rain'].idxmin()]
+    # Color settings
+    main_colors = {"aberporth": "blue", "armagh": "green"}
+    highlight_colors = {
+    "aberporth": {"max": "red", "min": "orange"},
+    "armagh": {"max": "purple", "min": "gold"}
+    }
 
-# Print max and min rainfall infomation for the data 
-print("Max Rain:", max_rain_row['rain'], "mm")
-print("Year:", max_rain_row['month_parsed'].year, "Month:", max_rain_row['month_parsed'].month)
+    for station in stations:
+        station_data = df_filtered[df_filtered["station"] == station].copy()
+        station_data["date"] = pd.to_datetime(station_data[["year", "month"]].assign(day=1))
 
-print("Min Rain:", min_rain_row['rain'], "mm")
-print("Year:", min_rain_row['month_parsed'].year, "Month:", min_rain_row['month_parsed'].month)
+    # Plot all rainfall points
+        plt.scatter(
+            station_data["date"],
+            station_data["rain"],
+            color=main_colors[station],
+            label=f"{station.title()} Data",
+            s=10
+    )
 
-#This part is going to output the graph
+        # Max Rainfall
+        max_row = station_data.loc[station_data["rain"].idxmax()]
+        plt.scatter(max_row["date"], max_row["rain"],
+                color=highlight_colors[station]["max"],
+                s=80, label=f"Max - {station.title()}")
+        plt.text(max_row["date"], max_row["rain"] + 5,
+             f"{int(max_row['year'])}-{int(max_row['month'])}",
+             color=highlight_colors[station]["max"])
 
-# Plotting the rainfall
-plt.figure(figsize=(12, 6))
-plt.plot(aberporth_df['month_parsed'], aberporth_df['rain'], label='Monthly Rainfall (mm)', linewidth=1)
+        # Min Rainfall
+        min_row = station_data.loc[station_data["rain"].idxmin()]
+        plt.scatter(min_row["date"], min_row["rain"],
+                color=highlight_colors[station]["min"],
+                s=80, label=f"Min - {station.title()}")
+        plt.text(min_row["date"], min_row["rain"] + 5,
+             f"{int(min_row['year'])}-{int(min_row['month'])}",
+             color=highlight_colors[station]["min"])
 
-# Highlight max and min points
-plt.scatter(max_rain_row['month_parsed'], max_rain_row['rain'], color='red', label='Max Rain')
-plt.scatter(min_rain_row['month_parsed'], min_rain_row['rain'], color='blue', label='Min Rain')
+    # Final plot styling
+    plt.title("Rainfall in Aberporth and Armagh - Max and Min Highlighted")
+    plt.xlabel("Year")
+    plt.ylabel("Rainfall (mm)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    #Show plot
+    plt.show()
 
-# Add labels and title
-plt.title("Monthly Rainfall in Aberporth")
-plt.xlabel("Date")
-plt.ylabel("Rainfall (mm)")
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-
-# Show plot
-plt.show()
+Benson()
