@@ -84,15 +84,6 @@ def Abdulla():
 
  
 
-# Run the function
-
-Abdulla()
-
-
-
-
-
-
 def Joseph():
 
     data=pd.read_csv('MET Office Weather Data.csv')
