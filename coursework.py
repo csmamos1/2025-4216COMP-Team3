@@ -500,7 +500,7 @@ def Muhammad():
 
 while True:
     Visualisation = input("\n Please type \033[1mJoseph()\033[0m to see average min temp and rainfall against years(1957-2019) visualization for hurn, " 
-    "and the average min temp and rainfall against years(1957-2019) visualisation for bradford and the comparison of trends between the two."
+    "and the average min temp and rainfall against years(1957-2019) visualisation for bradford and the comparison of trends between the two. \n"
     "\ntype \033[1mAbdulla()\033[0m if you wish to see air frost and sun\n"
     "\ntype \033[1mJake()\033[0m if you wish to see average hours of sunlight against months\n"
     "\ntype \033[1mBenson()\033[0m if you wish to see rainfall against months data \n"
