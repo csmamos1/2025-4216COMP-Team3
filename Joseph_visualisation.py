@@ -10,9 +10,9 @@ def joseph():
 
 # I excluded the year 1965 bcause there was missing data values!
     new_data_Hurn = data[data["rain"].notna() & (data["station"]=="hurn") & 
-                    (data["tmin"].notna())& (data["year"]!="1965.0")]
+                    (data["tmin"].notna())& (data["year"]<2020)]
                 
-    #print (new_data)
+    #print (len(new_data_Hurn))
 
 
    
@@ -25,20 +25,15 @@ def joseph():
     #print(new_data)
 
 
-#although indices where present was getting empty column, problem could be after deleted rows so reconfigured indices
+    #although indices where present was getting empty column,
+    #problem could be after deleted rows so reconfigured indices
     new_data0 = new_data_Hurn.reset_index(drop=True)
 
-    new_data1= new_data0[(new_data0["year"]<2020.0)]
 
-    
-
-    #print(len(new_data1)) # want to find how many months in total in my data set
+    #print(len(new_data0)) # want to find how many months in total in my data set
     #after finding there 753months 753/12 gives float, means some years must have less months
 
-
-
-
-    year_counts = new_data1["year"].value_counts()
+    year_counts = new_data0["year"].value_counts()
     year_range = range(1957, 2020)  
     year_counts = year_counts.reindex(year_range, fill_value=0)
     #print(year_counts)
@@ -52,33 +47,88 @@ def joseph():
     #issing_percentage = (missing_months / total_months) * 100
     #print(f"Missing Data Percentage: {missing_percentage:.2f}%")
 
+    new_data_Bradford = data[data["rain"].notna() & (data["station"]=="bradford") & 
+                    (data["tmin"].notna())& (data["year"]>1956)& (data["year"] <2020.0)]
+    
 
 
+    #print(len(new_data_Bradford))
 
+    pd.set_option("display.max_rows", None)  # Show all rows
+    pd.set_option("display.max_columns", None)  # Show all columns
 
-    tmin_range=new_data1["tmin"]       
+    new_datax = new_data_Bradford.reset_index(drop=True)
+    
+    year_counts = new_datax["year"].value_counts()
+    year_rangex = range(1957, 2020)  
+    year_counts = year_counts.reindex(year_rangex, fill_value=0)
+    #print(year_counts)
+
+    # calculate yearly tmin averages for station Hurn
+    tmin_range=new_data0["tmin"]       
     tmin_averages=[]
     for start in range(0, 753, 12):
         end = start + 12
         tmin_averages.append(tmin_range[start:end].sum()/12)  # values are summed from starrt to end and than /12 to get the averages
     
-
-    rain_range=new_data1["rain"]
+    #calculate yearly rainfall averages for station Hurn
+    rain_range=new_data0["rain"]
     rain_averages=[]
     for start in range (0,753,12):
         end = start +12
         rain_averages.append(rain_range[start:end].sum()/12)
 
+    #calculate sd for rain and tmin yearly averages
     std_dev_rain=np.std(rain_averages)
     std_dev_tmin= np.std(tmin_averages)
+    #calculate mean for averages accross 1957-2019 period
     mean_tmin_averages= np.mean(tmin_averages)
     mean_rain_averages=np.mean(rain_averages)
+    # show the percentage of sd as coefficient variable
     CV_rain= (std_dev_rain/mean_rain_averages)*100
     CV_tmin= (std_dev_tmin/mean_tmin_averages)*100 
+    #calculate percentage error
     total_months = 64 * 12  # Expected months
     missing_months = 3
     observed_months = total_months - missing_months
     missing_percentage = (missing_months / total_months) * 100
+
+    #print(CV_rain)
+
+    tmin_range1=new_datax["tmin"]       
+    tmin_averages1=[]
+    for start in range(0, 748, 12):
+        end = start + 12
+        tmin_averages1.append(tmin_range1[start:end].sum()/12)  
+    #values are summed from starrt to end and than /12 to get the averages
+
+    rain_range1=new_datax["rain"]
+    rain_averages1=[]
+    for start in range (0,748,12):
+        end = start +12
+        rain_averages1.append(rain_range1[start:end].sum()/12)
+
+    std_dev_rain1=np.std(rain_averages1)
+    std_dev_tmin1= np.std(tmin_averages1)
+    mean_tmin_averages1= np.mean(tmin_averages1)
+    mean_rain_averages1=np.mean(rain_averages1)
+    CV_rain1= (std_dev_rain1/mean_rain_averages1)*100
+    CV_tmin1= (std_dev_tmin1/mean_tmin_averages1)*100 
+    total_months1 = 64 * 12  # Expected months
+    missing_months1 = 3
+    observed_months1 = total_months1 - missing_months1
+    missing_percentage1 = (missing_months1 / total_months1) * 100
+
+    #print(CV_rain1)
+
+
+
+
+
+
+
+
+
 
     print(f"\n The average minimum temperature from the years 1957-2019 in Hurn is \n  "
           f"{mean_tmin_averages:.2f} celcius, the coldest year was in" 
@@ -105,11 +155,6 @@ def joseph():
 
     range_years= list(range(1957,2020))
     ###print(range_years)
-
-
-
-
-
     fig, ax = plt.subplots()
     ax.plot( range_years, tmin_averages,'mD', label="tmin_averages")
     fig.suptitle("Average Minimum Temerature per year", fontsize=20)
@@ -118,14 +163,16 @@ def joseph():
     ax.set_ylabel("Average Minimum temperature per year",fontsize=12, color='r')
     ax.xaxis.grid()
     ax.yaxis.grid()
-    ax.set_yticks(range(3,10,1))
-
     ax.set_xticks(range(1957,2020,1)) 
     ax.set_xticklabels(range_years, fontsize=8, rotation=45)
+    trend=np.polyfit(range_years, tmin_averages, 1) 
+    trend_line = np.poly1d(trend)(range_years)
     z=np.arange(1957, 2021)
     ax.set_xlim(z.min()-1, z.max())
     mean_val = np.mean(tmin_averages)
-    plt.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
+    ax.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
+    ax.plot(range_years, trend_line, color="orange", label="Trend Line")  
+
     ax.legend()
 
     
@@ -133,7 +180,7 @@ def joseph():
     plt.show()
     
 
-    #####******PAY ATTENTION NEED TO FIND MIN AND MAX VALUES FOR RAIN SO I CAN KNOW LIMITS FOR GRAPH****#######
+    
     fig, ax = plt.subplots()
     ax.plot( range_years, rain_averages, 'mD',  label= "rain averages")
     fig.suptitle("Average Rainfall from per year", fontsize=20)
@@ -143,17 +190,15 @@ def joseph():
 
     ax.xaxis.grid()
     ax.yaxis.grid()
-    ax.set_yticks(range(30,120,5))
-
     ax.set_xticks(range(1957,2020,1)) 
-
     x=np.arange(1957, 2021)
-    ax.set_xticklabels(range_years, fontsize=8)
     ax.set_xticklabels(range_years, fontsize=8, rotation=45)  # Adjust fontsize and rotation
-    ax.set_yticklabels(ax.get_yticks(), fontsize=8)
+    trend=np.polyfit(range_years, rain_averages, 1) 
+    trend_line = np.poly1d(trend)(range_years)
     ax.set_xlim(x.min()-1, x.max())  # delete extra space at the end of grid
     mean_val = np.mean(rain_averages)
     plt.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
+    ax.plot(range_years, trend_line, color="orange", label="Trend Line")  
     ax.legend()
     
    
@@ -163,17 +208,94 @@ def joseph():
 
 
 
+    
+    range_years= list(range(1957,2020))
     fig, ax = plt.subplots()
-    ax.plot(range_years, tmin_averages, 'mD:')
-    ax.set_ylabel("Average Minimum temperature", color='m')
-    ax1 = ax.twinx()
-    ax1.plot(range_years, rain_averages, 'ro--')
-    ax1.set_ylabel("Average rainfall", color='r')
+    ax.plot( range_years, tmin_averages1,'mD', label="tmin_averages")
+    fig.suptitle("Average Minimum Temerature per year", fontsize=20)
+    ax.set_title("Station: Bradford", fontsize=14)
+    ax.set_xlabel("Years from 1957-2019", fontsize=12, color='r')
+    ax.set_ylabel("Average Minimum temperature per year",fontsize=12, color='r')
+    ax.xaxis.grid()
+    ax.yaxis.grid()
+    ax.set_xticks(range(1957,2020,1)) 
+    ax.set_xticklabels(range_years, fontsize=8, rotation=45)
+    trend=np.polyfit(range_years, tmin_averages1, 1) 
+    trend_line = np.poly1d(trend)(range_years)
+    z=np.arange(1957, 2021)
+    ax.set_xlim(z.min()-1, z.max())
+    mean_val = np.mean(tmin_averages1)
+    ax.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
+    ax.plot(range_years, trend_line, color="orange", label="Trend Line")  
+
+    ax.legend()
+
+    
 
     plt.show()
 
-    print(f"{min(rain_averages):.2f}")
-    print(f"{max(rain_averages):.2f}")
+
+    fig, ax = plt.subplots()
+    ax.plot( range_years, rain_averages1, 'mD',  label= "rain averages")
+    fig.suptitle("Average Rainfall from per year", fontsize=20)
+    ax.set_title("Station: Bradford", fontsize=14)
+    ax.set_xlabel("Years from 1957-2019", fontsize=12, color='r')
+    ax.set_ylabel("Average rainfall per mm",fontsize=12, color='r')
+
+    ax.xaxis.grid()
+    ax.yaxis.grid()
+    ax.set_xticks(range(1957,2020,1)) 
+    x=np.arange(1957, 2021)
+    ax.set_xticklabels(range_years, fontsize=8, rotation=45)  # Adjust fontsize and rotation
+    trend=np.polyfit(range_years, rain_averages1, 1) 
+    trend_line = np.poly1d(trend)(range_years)
+    ax.set_xlim(x.min()-1, x.max())  # delete extra space at the end of grid
+    mean_val = np.mean(rain_averages1)
+    plt.axhline(mean_val, color='red', linestyle='--', linewidth=2, label='Mean')
+    ax.plot(range_years, trend_line, color="orange", label="Trend Line")  
+    
+    ax.legend()
+    
+   
+
+
+    plt.show()
+
+
+
+
+    fig, ax = plt.subplots()
+    fig.suptitle("Average Minimum Temperature ", fontsize=20)
+    ax.set_title("Hurn Trend against Bradford Trend", fontsize=14)
+    ax.set_ylabel("Average Minimum temperature", color='m')
+    trend1=np.polyfit(range_years, tmin_averages, 1) 
+    trend_line = np.poly1d(trend1)(range_years)
+    ax.plot(range_years, trend_line, color="orange", label="Trend Line")
+    ax1 = ax.twinx()
+    ax1.set_ylabel("Average minimum temperature", color='r')
+    trend2=np.polyfit(range_years, tmin_averages1, 1) 
+    trend_line1 = np.poly1d(trend2)(range_years)
+    ax1.plot(range_years, trend_line1, color="blue", label="Trend Line")  
+    ax.legend()
+    ax1.legend()
+    plt.show()
+
+
+    fig, ax = plt.subplots()
+    fig.suptitle("Average Rainfall ", fontsize=20)
+    ax.set_title("Hurn Trend against Bradford Trend", fontsize=14)
+    ax.set_ylabel("Average rainfall in Hurn", color='orange')
+    trend1=np.polyfit(range_years, rain_averages, 1) 
+    trend_line1 = np.poly1d(trend1)(range_years)
+    ax.plot(range_years, trend_line1, color="orange", label="Hurn Trend Line")
+    ax1 = ax.twinx()
+    ax1.set_ylabel("Average rainfall in Bradford", color='blue')
+    trend2=np.polyfit(range_years, rain_averages1, 1) 
+    trend_line2 = np.poly1d(trend2)(range_years)
+    ax1.plot(range_years, trend_line2, color="blue", label=" Bradford Trend Line")  
+    ax.legend()
+    ax1.legend()
+    plt.show()
 
 
 
