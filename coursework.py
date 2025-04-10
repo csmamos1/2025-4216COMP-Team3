@@ -48,12 +48,12 @@ def Abdulla():
 
 
 
-data=pd.read_csv('MET Office Weather Data.csv')
+
 
 
 def Joseph():
 
-
+    data=pd.read_csv('MET Office Weather Data.csv')
 
     #exlcude 2020 as there are missing data values
     new_data_Hurn = data[data["rain"].notna() & (data["station"]=="hurn") & 
