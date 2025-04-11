@@ -88,7 +88,7 @@ def joseph():
     CV_rain= (std_dev_rain/mean_rain_averages)*100
     CV_tmin= (std_dev_tmin/mean_tmin_averages)*100 
     #calculate percentage error
-    total_months = 64 * 12  # Expected months
+    total_months = 63 * 12  # Expected months
     missing_months = 3
     observed_months = total_months - missing_months
     missing_percentage = (missing_months / total_months) * 100
@@ -114,8 +114,8 @@ def joseph():
     mean_rain_averages1=np.mean(rain_averages1)
     CV_rain1= (std_dev_rain1/mean_rain_averages1)*100
     CV_tmin1= (std_dev_tmin1/mean_tmin_averages1)*100 
-    total_months1 = 64 * 12  # Expected months
-    missing_months1 = 3
+    total_months1 = 63 * 12  # Expected months
+    missing_months1 = 8
     observed_months1 = total_months1 - missing_months1
     missing_percentage1 = (missing_months1 / total_months1) * 100
 
