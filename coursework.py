@@ -497,34 +497,52 @@ def Peter():
     plt.show()
 
 def Muhammad():
-    # Load the CSV file 
-    file_path = "MET Office Weather Data.csv"
-    df = pd.read_csv(file_path)
+   
+    # Load the CSV file
+    df = pd.read_csv("MET Office Weather Data.csv")
 
-    # Filter for 'aberporth' station
-    df_aberporth = df[df["station"] == "aberporth"]
+    # Normalize station names
+    df["station"] = df["station"].str.lower().str.strip()
 
-    # Drop rows with missing tmax or tmin values
-    df_aberporth = df_aberporth.dropna(subset=["tmax", "tmin"])
+    # Filter for specific stations
+    filtered_stations = df[df["station"].isin(["aberporth", "ballypatrick"])]
 
-    # Convert year and month into a datetime format for better plotting
-    df_aberporth["date"] = pd.to_datetime(df_aberporth[["year", "month"]].assign(day=1))
+    # Drop rows with missing year or tmax/tmin
+    filtered_stations = filtered_stations.dropna(subset=["year", "tmax", "tmin"])
 
-    # Sort by date
-    df_aberporth = df_aberporth.sort_values("date")
+    # Convert year to int
+    filtered_stations["year"] = filtered_stations["year"].astype(int)
 
-    # Plot temperature trends
-    plt.figure(figsize=(12, 6))
-    plt.plot(df_aberporth["date"], df_aberporth["tmax"], label="Max Temperature (°C)", color="red")
-    plt.plot(df_aberporth["date"], df_aberporth["tmin"], label="Min Temperature (°C)", color="blue")
+    # Get the latest year and filter for the last 20 years
+    latest_year = filtered_stations["year"].max()
+    last_20_years = filtered_stations[filtered_stations["year"] >= latest_year - 19]
 
-    # Formatting the plot
-    plt.xlabel("Year")
-    plt.ylabel("Temperature (°C)")
-    plt.title("Aberporth Minimum and Maximum Temperatures Over Time")
-    plt.legend()
-    plt.grid(True)
+    # Create a 'date' column for plotting
+    last_20_years["date"] = pd.to_datetime(
+        last_20_years["year"].astype(str) + "-" + last_20_years["month"].astype(int).astype(str) + "-01"
+    )
+
+    # Plotting
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(16, 12), sharex=True)
+
+    # Define colors
+    colors = {"tmax": "red", "tmin": "blue"}
+
+    # Plot for each station
+    stations = ["aberporth", "ballypatrick"]
+    for i, station in enumerate(stations):
+        station_data = last_20_years[last_20_years["station"] == station]
+        axes[i].plot(station_data["date"], station_data["tmax"], label="Max Temp", color=colors["tmax"])
+        axes[i].plot(station_data["date"], station_data["tmin"], label="Min Temp", color=colors["tmin"])
+        axes[i].set_title(f"Monthly Temperatures in {station.capitalize()} (Last 20 Years)", fontsize=14)
+        axes[i].set_ylabel("Temperature (°C)")
+        axes[i].grid(True)
+        axes[i].legend()
+
+    axes[-1].set_xlabel("Year")
+    plt.tight_layout()
     plt.show()
+
 
 
 
